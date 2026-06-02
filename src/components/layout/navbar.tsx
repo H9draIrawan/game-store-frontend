@@ -13,6 +13,7 @@ import {
 	Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 const navItems = [
 	{ label: "Home", path: "/app#home" },
@@ -150,31 +151,15 @@ function Navbar() {
 						))}
 					</Box>
 					{/* DESKTOP LOGIN */}
-					<Button
-						color="inherit"
-						href="/login"
-						sx={{
-							display: { xs: "none", md: "flex" },
-							textDecoration: "none",
-							justifyContent: "flex-end",
-							gap: 2,
-						}}
-					>
-						<LoginIcon />
-						Login
-					</Button>
+					<NavLink to="/login" className="md:block hidden text-xl">
+						<LoginIcon fontSize="large" className="mx-2" />
+						LOGIN
+					</NavLink>
 
 					{/* MOBILE LOGIN */}
-					<Button
-						color="inherit"
-						href="/login"
-						sx={{
-							display: { xs: "flex", md: "none" },
-							justifyContent: "flex-end",
-						}}
-					>
-						<LoginIcon />
-					</Button>
+					<NavLink to="/login" className="md:hidden block text-xl">
+						<LoginIcon fontSize="large" className="mx-2" />
+					</NavLink>
 				</Toolbar>
 			</Container>
 		</AppBar>
