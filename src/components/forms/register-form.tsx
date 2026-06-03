@@ -1,4 +1,6 @@
 import { LockOutlined } from "@mui/icons-material";
+import CodeIcon from "@mui/icons-material/Code";
+import PersonIcon from "@mui/icons-material/Person";
 import {
 	Box,
 	Button,
@@ -7,35 +9,13 @@ import {
 	TextField,
 	Typography,
 } from "@mui/material";
-import { useActionState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState } from "react";
+import { Form, NavLink, useActionData } from "react-router-dom";
 
 function RegisterForm() {
-	async function registerUser(_previousState: any, formData: FormData) {
-		const email = formData.get("email");
-		const password = formData.get("password");
-		const fullname = formData.get("fullname");
-		const username = formData.get("username");
+	const actionData = useActionData();
+	const [role, setRole] = useState("");
 
-		if (!email || !password || !fullname || !username) {
-			return {
-				success: false,
-				message: "All fields are required",
-				values: { email, password, fullname, username },
-			};
-		}
-
-		return {
-			success: true,
-			message: `Account created successfully`,
-			values: { email: "", password: "", fullname: "", username: "" },
-		};
-	}
-	const [state, formAction, isPending] = useActionState(registerUser, {
-		success: false,
-		message: "",
-		values: { email: "", password: "", fullname: "", username: "" },
-	});
 	return (
 		<Box
 			sx={{
@@ -88,13 +68,7 @@ function RegisterForm() {
 					</Typography>
 
 					{/* Form */}
-					<Box
-						component="form"
-						sx={{ mt: 1, width: "100%" }}
-						action={formAction}
-						noValidate
-					>
-						{/* Custom styling untuk TextField di Dark Mode */}
+					<Form method="POST" noValidate>
 						<TextField
 							margin="normal"
 							required
@@ -196,9 +170,97 @@ function RegisterForm() {
 							}}
 						/>
 
+						{/* Button Role */}
+						<Box
+							sx={{
+								margin: "1rem 0",
+								display: "flex",
+								gap: 1,
+								backgroundColor: "#120b24",
+								padding: "6px",
+								borderRadius: "24px",
+								border: "1px solid #2d1a4d",
+							}}
+						>
+							<Box
+								component="button"
+								onClick={() => setRole("customer")}
+								type="button"
+								name="role"
+								value="customer"
+								sx={{
+									flex: 1,
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+									gap: 1.5,
+									padding: "12px 24px",
+									borderRadius: "18px",
+									border: "none",
+									backgroundColor:
+										role === "customer" ? "#6d28d9" : "transparent",
+									color: role === "customer" ? "#ffffff" : "#a78bfa",
+									cursor: "pointer",
+									transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+									boxShadow:
+										role === "customer"
+											? "0px 4px 16px rgba(109, 40, 217, 0.45)"
+											: "none",
+									"&:hover": {
+										backgroundColor:
+											role === "customer"
+												? "#5b21b6"
+												: "rgba(167, 139, 250, 0.08)",
+										color: role === "customer" ? "#ffffff" : "#c084fc",
+									},
+								}}
+							>
+								<PersonIcon fontSize="small" />
+								<Typography sx={{ fontWeight: 600 }}>Customer</Typography>
+							</Box>
+
+							<Box
+								component="button"
+								onClick={() => setRole("developer")}
+								type="button"
+								name="role"
+								value="developer"
+								sx={{
+									flex: 1,
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+									gap: 1.5,
+									padding: "12px 24px",
+									borderRadius: "18px",
+									border: "none",
+									backgroundColor:
+										role === "developer" ? "#6d28d9" : "transparent",
+									color: role === "developer" ? "#ffffff" : "#a78bfa",
+									cursor: "pointer",
+									transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+									boxShadow:
+										role === "developer"
+											? "0px 4px 16px rgba(109, 40, 217, 0.45)"
+											: "none",
+									"&:hover": {
+										backgroundColor:
+											role === "developer"
+												? "#5b21b6"
+												: "rgba(167, 139, 250, 0.08)",
+										color: role === "developer" ? "#ffffff" : "#c084fc",
+									},
+								}}
+							>
+								<CodeIcon fontSize="small" />
+								<Typography sx={{ fontWeight: 600 }}>Developer</Typography>
+							</Box>
+						</Box>
+
+						{/* Hidden input untuk submit role */}
+						<input type="hidden" name="role" value={role} />
 						{/* Tombol Submit */}
 						<Button
-							disabled={isPending}
 							type="submit"
 							variant="contained"
 							size="large"
@@ -216,19 +278,20 @@ function RegisterForm() {
 								boxShadow: `0px 4px 10px rgba(157, 78, 223, 0.3)`,
 							}}
 						>
-							{isPending ? "Loading..." : "Sign Up"}
+							Sign Up
 						</Button>
 
-						{state && (
+						{actionData?.error && (
 							<Typography
-								style={{
-									color: state.success ? "green" : "red",
+								sx={{
+									color: "red",
 									textAlign: "center",
 								}}
 							>
-								{state.message}
+								{actionData?.error}
 							</Typography>
 						)}
+
 						{/* Link Tambahan */}
 						<Box
 							sx={{
@@ -247,7 +310,7 @@ function RegisterForm() {
 							</Typography>
 							<NavLink to="/login">Sign In</NavLink>
 						</Box>
-					</Box>
+					</Form>
 				</Paper>
 			</Container>
 		</Box>

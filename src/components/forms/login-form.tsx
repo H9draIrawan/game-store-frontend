@@ -155,7 +155,7 @@ function LoginForm() {
 								boxShadow: `0px 4px 10px rgba(157, 78, 223, 0.3)`,
 							}}
 						>
-							Login
+							Sign In
 						</Button>
 
 						{actionData?.error && (
